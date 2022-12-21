@@ -1,19 +1,23 @@
-#include <vector>
-#include <iostream>
+
+#include "vectorExample.hpp"
+
+template<typename T>
+void PrintData(const vectorExample<T> &myvector)
+{
+	for (size_t i = 0; i < myvector.Size(); i++)
+		std::cout << myvector[i] << "\n";
+}
 
 int main()
 {
-	std::vector<int> myvector;
+	vectorExample<int> myvector(2);
 
-  // set some content in the vector:
-  for (int i=0; i<100; i++) myvector.push_back(i);
+  for (int i=0; i<4; i++) myvector.PushBack(i);
 
-  std::cout << "size: " << myvector.size() << "\n";
-  std::cout << "capacity: " << myvector.capacity() << "\n";
-  std::cout << "max_size: " << myvector.max_size() << "\n";
+  std::cout << "size: " << myvector.Size() << "\n";
+  std::cout << "capacity: " << myvector.Capasity() << "\n";
+
+  PrintData(myvector);
   return 0;
-
-  return 0;
-
 
 }
