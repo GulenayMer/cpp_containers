@@ -6,7 +6,7 @@
 /*   By: mgulenay <mgulenay@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 14:56:11 by mgulenay          #+#    #+#             */
-/*   Updated: 2022/12/21 20:27:03 by mgulenay         ###   ########.fr       */
+/*   Updated: 2022/12/22 16:50:08 by mgulenay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@
 
 #include <memory>
 #include <iostream>
-#include <vector>
+#include "RandomAccessIterator.hpp"
+#include "ReverseIterator.hpp"
+
+//#include <vector>
 
 
 /*
@@ -54,20 +57,18 @@ namespace ft
 		public: 
 		
 		/*  ####################################  Aliases --  template parameters , types : ##########################  */
-		typedef T		value_type;
-		typedef Alloc	allocator_type;
-	
-		typedef typename allocator_type::pointer				pointer; // T*
-    	typedef typename allocator_type::const_pointer			const_pointer; // const T*
-		typedef typename allocator_type::reference				reference; // T&
-  		typedef typename allocator_type::const_reference		const_reference; // const T&
-		typedef typename allocator_type::size_type				size_type; 
-		typedef typename allocator_type::difference_type		difference_type;
-		typedef typename allocator_type::iterator				iterator; 
-		typedef typename allocator_type::const_iterator			const_iterator;
-    	typedef typename allocator_type::reverse_iterator		reverse_iterator;
-		typedef typename allocator_type::const_reverse_iterator	const_reverse_iterator;
-
+		typedef T														value_type;
+		typedef Alloc													allocator_type;
+		typedef value_type&												reference; // T&
+  		typedef const value_type&										const_reference; // const T&
+		typedef typename allocator_type::pointer						pointer; // T*
+    	typedef typename allocator_type::const_pointer					const_pointer; // const T*
+		typedef typename ft::RandomAccessIterator<value_type>			iterator; 
+		typedef typename ft::RandomAccessIterator<const value_type>		const_iterator;
+    	typedef typename ft::ReverseIterator<value_type>				reverse_iterator;
+		typedef typename ft::ReverseIterator<const value_type>			const_reverse_iterator;
+		typedef typename std::ptrdiff_t									difference_type;
+		typedef typename std::size_t									size_type; 
 
 		private:
 		
@@ -144,57 +145,39 @@ namespace ft
 
 		/* ###########################     ITERATORS  ##############################  */
 		
-		/* iterator pointing to the first element of the vector */
+		/* iterator pointing to the first element of the vector ; returns it to beginnig*/
 		iterator begin() { return iterator(_pointer_Arr); };
-		const_iterator begin() const { return const_iterator(_pointer_Arr); };
+		const_iterator cbegin() const { return const_iterator(_pointer_Arr); };
 		
-		/* iterator pointing to the 'past-the-end' element of the vector */
+		/* iterator pointing to the 'past-the-end' element of the vector; returns it to end */
 		iterator end() { return iterator(_pointer_Arr + _size); };
-		const_iterator end() const { return const_iterator(_pointer_Arr + _size); };
+		const_iterator cend() const { return const_iterator(_pointer_Arr + _size); };
 		
 		/* reverse iterator pointing to the 'before-the-first' element of the vector */
 		reverse_iterator rbegin() { return reverse_iterator(_pointer_Arr - 1); };
-		const_reverse_iterator rbegin() const { return const_reverse_iterator(_pointer_Arr - 1); };
+		const_reverse_iterator crbegin() const { return const_reverse_iterator(_pointer_Arr - 1); };
 		
 		/* reverse iterator pointing to the last element of the vector */
 		reverse_iterator rend() { return reverse_iterator(_pointer_Arr + _size - 1); };
-		const_reverse_iterator rend() const { return const_reverse_iterator(_pointer_Arr + _size - 1); };
+		const_reverse_iterator crend() const { return const_reverse_iterator(_pointer_Arr + _size - 1); };
 
-	
-		/* ##########################     ELEMENT ACCESS   ##############################  */
-		
-		/* a reference to the element at n index  */
-		reference at( size_type pos )
-		{
-			if ( pos >= _size )
-				throw std::out_of_range("out range");
-			return _pointer_Arr[pos];
-		};
-		
-		/* a reference to the element at n index  */
-		reference operator[]( size_type pos ) { return _pointer_Arr[pos]; };
-		const_reference operator[]( size_type pos ) const { return _pointer_Arr[pos]; };
-		
-		/* Access the first element */
-		reference front() { return _pointer_Arr[0]; };
-		const_reference front() const { return _pointer_Arr[0]; };
-		
-		/* Access the last element */
-		reference back() { return _pointer_Arr[_size - 1]; };
-		const_reference back() const { return _pointer_Arr[_size - 1]; };
-		
-		T* data();
 
 		/* ############################   CAPASITY   ##############################  */
 		
-		/* returns true if the vector is empty */
-		bool		empty() const {  return (_size == 0); };
-		
 		/* returns the size of the vector  */
 		size_type	size() const { return _size; };
-
+		
 		/* returns the maximum size that can be allocated  */
 		size_type	max_size() const;
+		
+		/* resizes the container so that it contains n elements */
+		void resize (size_type n, value_type val = value_type());
+		
+		/* returns the actual storage size allocated */
+		size_type	capacity() const { return _capasity; };
+		
+		/* returns true if the vector is empty */
+		bool		empty() const {  return (_size == 0); };
 		
 		/* the new capasity to be allocated */
 		void		reserve(size_type new_cap)
@@ -205,14 +188,69 @@ namespace ft
 				ReAlloc(new_cap);
 		};
 
-		/* returns the actual storage size allocated */
-		size_type	capacity() const { return _capasity; };
+	
+		/* ##########################     ELEMENT ACCESS   ##############################  */
+		
+		/* a reference to the element at n index  */
+		reference operator[]( size_type pos ) { return _pointer_Arr[pos]; };
+		const_reference operator[]( size_type pos ) const { return _pointer_Arr[pos]; };
+		
+		/* a reference to the element at n index  */
+		reference at( size_type pos )
+		{
+			if ( pos >= _size )
+				throw std::out_of_range("out range");
+			return _pointer_Arr[pos];
+		};
+
+		const_reference at (size_type pos) const
+		{
+			if ( pos >= _size )
+				throw std::out_of_range("out range");
+			return _pointer_Arr[pos];
+		};
+		
+		/* Access the first element */
+		reference front() { return _pointer_Arr[0]; };
+		const_reference front() const { return _pointer_Arr[0]; };
+		
+		/* Access the last element */
+		reference back() { return _pointer_Arr[_size - 1]; };
+		const_reference back() const { return _pointer_Arr[_size - 1]; };
 		
 
 		/* ##########################     MODIFIERS / METHODS   ##############################  */
-		void clear();
+		
+		/* 	assigns new containers to the vector, replacing its current contents
+			& modifying its size accordingly.
+		*/
+		template <class InputIterator>  void assign (InputIterator first, InputIterator last);
+		
+		void assign (size_type n, const value_type& val);
 
-		/* insert an element with a value of value at a positon pos &
+		/* adds the new element to the end ;
+		 in case no capasity , has to reallocate & increase it 
+		*/
+		push_back(const T &value)
+		{
+			if (_size >= _capasity)
+			{
+				ReAlloc((_capasity + _size) / 2); // growing by 50%
+			}
+			_allocType.construct(_pointer_Arr[_size], value);
+			_size += 1;
+		};
+
+		/* remove the last element */
+		void pop_back()
+		{
+			if (_size)
+				_alloc.destroy(&_pointer_Arr[_size - 1]);
+				_size -= 1;
+		};
+
+		
+				/* insert an element with a value of value at a positon pos &
 			incereases the size of the vector
 			needs to be reallocated if the capacity is not enough
 		*/
@@ -253,38 +291,25 @@ namespace ft
 			
 		};
 		
-		/* adds the new element to the end ;
-		 in case no capasity , has to reallocate & increase it 
-		*/
-		push_back(const T &value)
-		{
-			if (_size >= _capasity)
-			{
-				ReAlloc((_capasity + _size) / 2); // growing by 50%
-			}
-			_allocType.construct(_pointer_Arr[_size], value);
-			_size += 1;
-		};
+		void swap(vector &other);
+		void clear();
+		
+		/* ##########################   ALLOCATOR  ##############################  */
 
-		/* remove the last element */
-		void pop_back()
-		{
-			if (_size)
-				_alloc.destroy(&_pointer_Arr[_size - 1]);
-				_size -= 1;
-		};
+		/* returns a copy of the allocator obj assosiated with the vector */
+		allocator_type get_allocator() const;
 
 		
-		void resize( size_type count );
-		void swap(vector &other);
+		/* ##########################    PRIVATE METHODS   ##############################  */
 
 		private: 
 
+		/* allocates a new block of memory 
+			copies / moves old elements into new block
+			deletes 
+		*/
 		void ReAlloc(size_t newCapasity)
 		{
-			// 1. allocate a new block of memory
-			// 2. copy / move old elements into new block
-			// 3. delete
 			pointer temp = _allocType(newCapasity); // allocate()
 
 			if (newCapasity < _size) // downsizing 
@@ -302,7 +327,12 @@ namespace ft
 	}
 
 
-	/* ##########################     NON-MEMBER FUNCTIONS   ##############################  */
+	/* ##########################     NON-MEMBER FUNCTIONS OVERLOADS   ##############################  */
+	
+	/* performs the appropriate comparison operation 
+		btw the vector containers lhs & rhs 
+	*/
+	
 	template< class T, class Alloc >
 	// true if the contents of the vectors are equal, false otherwise
 	bool operator==(const ft::vector<T,Alloc>& lhs,
