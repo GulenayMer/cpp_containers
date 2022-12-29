@@ -6,7 +6,7 @@
 /*   By: mgulenay <mgulenay@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 17:16:43 by mgulenay          #+#    #+#             */
-/*   Updated: 2022/12/28 20:12:19 by mgulenay         ###   ########.fr       */
+/*   Updated: 2022/12/29 11:55:28 by mgulenay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,16 +259,16 @@ namespace ft
 			relative to the element they point to, offering the same functionality as pointers
 		*/
 	template <typename T>
-	class random_access_iterator
+	class random_access_iterator : public iterator<random_access_iterator_tag, T>
 	{
 
 		public:
 		
-		typedef typename iterator<random_access_iterator_tag, T>::value_type		value_type;
-		typedef typename iterator<random_access_iterator_tag, T>::difference_type	difference_type;
-		typedef typename iterator<random_access_iterator_tag, T>::pointer			pointer;
-		typedef typename iterator<random_access_iterator_tag, T>::reference			reference;
-		typedef typename iterator<random_access_iterator_tag, T>::iterator_category	iterator_category;
+		typedef typename ft::iterator<random_access_iterator_tag, T>::value_type		value_type;
+		typedef typename ft::iterator<random_access_iterator_tag, T>::difference_type	difference_type;
+		typedef typename ft::iterator<random_access_iterator_tag, T>::pointer			pointer;
+		typedef typename ft::iterator<random_access_iterator_tag, T>::reference			reference;
+		typedef typename ft::iterator<random_access_iterator_tag, T>::iterator_category	iterator_category;
 
 		protected: 
 			pointer		_it_ptr;
@@ -276,24 +276,151 @@ namespace ft
 		public:
 		
 		random_access_iterator() : _it_ptr(NULL) {};
-
 		random_access_iterator(pointer ptr) : _it_ptr(ptr) {};
-		
 		random_access_iterator(const random_access_iterator<T> &src) : _it_ptr(src._it_ptr) {};
-
 		random_access_iterator &operator=(const random_access_iterator<T> &src)
 		{
 			if (this != src)
 				_it_ptr = src._it_ptr;
 			return (*this);
-		};
-			
+		};	
 		virtual ~random_access_iterator() {};
-	}
 
+		pointer base() const
+		{
+			return (_it_ptr);
+		}
+
+		/* ------------------------------ reference & dereference -------------------- */
+		reference operator*() const
+		{
+			return (*_it_ptr);
+		}		
+		
+		pointer operator->() const
+		{
+			return _it_ptr;
+		}
+	
+		/* dereference with offset */
+		reference operator[](difference_type n) const
+		{
+			return (_it_ptr + n);
+		}
+	
+		/*  --------------------- increment & decrement ----------------------- */
+		random_access_iterator operator++(int)
+		{
+			random_access_iterator temp(*this);
+			_it_ptr += 1;
+			return (temp);
+		}
+
+		random_access_iterator &operator++()
+		{
+			++_it_ptr;
+			return (*this);
+		}
+
+		random_access_iterator operator--(int)
+		{
+			random_access_iterator temp(*this);
+			_it_ptr -= 1;
+			return (temp);
+		}
+
+		random_access_iterator &operator--()
+		{
+			--_it_ptr;
+			return (*this);
+		}
+
+		/* ------------------- arithmetic operators --------------------- */
+
+		/* returns a random access iterator pointing to the element located n positions away from the element the 
+			iterator currently points to
+		*/
+		random_access_iterator operator+(difference_type n) const
+		{
+			return (_it_ptr + n);	
+		}
+	
+		/* returns a reverse iterator pointing to the element located n positions before the element the 
+			iterator currently points to
+		*/
+		random_access_iterator operator-(difference_type n) const
+		{
+			return (_it_ptr - n);
+		}
+
+		/* advances the reverse_iterator by n elements positions */
+		random_access_iterator operator+=(difference_type n) const
+		{
+			_it_ptr += n;
+			return (*this);	
+		}
+
+		/* decreases the reverse_iterator by n elements positions */
+		random_access_iterator operator-=(difference_type n) const
+		{
+			_it_ptr -= n;
+			return (*this);	
+		}
+
+	};
+
+		/*    ################  non member function overloads for random access iterator ###################### */
+	
+	/* 	 Performs the appropriate comparison operation between the reverse_iterator objects lhs and rhs. */
+	template <class Iterator>
+	bool operator==(const ft::random_access_iterator<Iterator>& lhs, const ft::random_access_iterator<Iterator>& rhs)
+	{
+		return ( lhs.base() == rhs.base() );
+	};
+	
+	bool operator!=(const ft::random_access_iterator<Iterator>& lhs, const ft::random_access_iterator<Iterator>& rhs)
+	{
+		return ( lhs.base() != rhs.base() );
+	};
+	
+	bool operator<(const ft::random_access_iterator<Iterator>& lhs, const ft::random_access_iterator<Iterator>& rhs)
+	{
+		return ( lhs.base() < rhs.base() );
+	};
+	
+	bool operator<=(const ft::random_access_iterator<Iterator>& lhs, const ft::random_access_iterator<Iterator>& rhs)
+	{
+		return ( lhs.base() <= rhs.base() );
+	};
+	
+	bool operator>(const ft::random_access_iterator<Iterator>& lhs, const ft::random_access_iterator<Iterator>& rhs)
+	{
+		return ( lhs.base() > rhs.base() );
+	};
+
+	bool operator>=(const ft::random_access_iterator<Iterator>& lhs, const ft::random_access_iterator<Iterator>& rhs)
+	{
+		return ( lhs.base() >= rhs.base() );
+	};
+	
+	/* returns a reverse iterator pointing to the element located n positions away 
+		from the element pointed to by rev_iter 
+	*/
+	template <class Iterator>
+	random_access_iterator<iterator> operator+(typename ft::random_access_iterator<Iterator>::difference_type n,
+							const ft::random_access_iterator<Iterator>& rev_it)
+	{
+		return (rev_it + n);
+	};
+	
+	/* returns the distance between lhs & rhs */
+	template <class Iterator>  
+	typename random_access_iterator<Iterator>::difference_type operator-(const random_access_iterator<Iterator>& lhs,
+					const random_access_iterator<Iterator>& rhs)
+	{
+		return (lhs.base() - rhs.base());
+	};
 
 } 
-
-
 
 #endif
