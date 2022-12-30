@@ -1,5 +1,42 @@
+#include <iostream>
+#include <iterator>
+#include <vector>
 
-#include "vectorExample.hpp"
+using namespace std;
+
+
+int main()
+{
+
+	std::vector<string> planets = {"Mercury", "Venus", "Earth", "Mars", "Saturn", "Neptun"};
+
+/* 	for (int i = 0; i < planets.size(); i++)
+	{
+		cout << planets[i] << endl;
+	} */
+
+	// ranged-based for loop , as of c11
+	/* for (string planet : planets)
+		cout << planet << endl; */
+
+	for (vector<string>::iterator it = planets.begin(); it != planets.end(); it++)
+		cout << *it << endl;
+
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* #include "vectorExample.hpp"
 
 template<typename T>
 void PrintData(const vectorExample<T> &myvector)
@@ -20,4 +57,4 @@ int main()
   PrintData(myvector);
   return 0;
 
-}
+} */
