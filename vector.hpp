@@ -6,7 +6,7 @@
 /*   By: mgulenay <mgulenay@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 14:56:11 by mgulenay          #+#    #+#             */
-/*   Updated: 2022/12/31 18:10:26 by mgulenay         ###   ########.fr       */
+/*   Updated: 2023/01/05 14:58:11 by mgulenay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include "iterator.hpp"
 #include "std_functions.hpp"
 
+
 #define RESET   "\033[0m"
 #define BLACK   "\033[30m"      /* Black */
 #define RED     "\033[31m"      /* Red */
@@ -28,30 +29,29 @@
 #define CYAN    "\033[36m"      /* Cyan */
 #define WHITE   "\033[37m"      /* White */
 
-
-//#include <vector>
-
 /*
-	vector<T,A> 
+	vector<T,A>
 	a contiguously allocated sequence of Ts;
 
 	template < class T, class Alloc = allocator<T> > class vector;
 
 	Allocator, a template arg. that the container uses to acquire & release memory
 	std::allocator<T> uses new() & delete()
-
 */
 
 namespace ft
 {
 	/* a generic class template vector */
-	template < class T, class Alloc = std::allocator<T> > 
+	template < 
+		class T, 
+		class Alloc = std::allocator<T>
+	> 
 	class vector
 	{
 
 		public: 
 		
-		/*  ####################################  Aliases --  template parameters , types : ##########################  */
+		/*  ######################Aliases --  template parameters , types : #####################  */
 		typedef T														value_type;
 		typedef Alloc													allocator_type;
 		typedef typename allocator_type::reference						reference; // T&
@@ -63,7 +63,7 @@ namespace ft
     	typedef typename ft::reverse_iterator<value_type>				reverse_iterator;
 		typedef typename ft::reverse_iterator<const value_type>			const_reverse_iterator;
 		typedef typename ft::iterator_traits<iterator>::difference_type	difference_type; // ptrdiff_t
-		typedef typename allocator_type::size_t							size_type; // size_t
+		typedef typename allocator_type::size_type							size_type; // size_t
 
 		private:
 		
@@ -76,7 +76,7 @@ namespace ft
 
 		public: 
 		
-		/* #############################     CONSTRUCTORS     ######################################## */
+		/* ###################     CONSTRUCTORS     ############################# */
 			
 		/*
 			default constructor : the container keeps & uses an internal copy of this allocator
@@ -89,13 +89,15 @@ namespace ft
 		};
 	
 		/*
-			constructor with parameters : Constructs a container with n elements. Initialize each elements by copying of val.
+			constructor with parameters : Constructs a container with n elements. I
+			Initialize each elements by copying of val.
 			 + allocate (size_type n, allocator<void>::const_pointer hint=0) :
 				Attempts to allocate a block of storage with a size large enough to contain 
-				n elements of member type value_type (an alias of the allocator's template parameter), and returns a pointer to the first element. 
+				n elements of member type value_type (an alias of the allocator's template parameter), 
+				and returns a pointer to the first element. 
 			 + void construct( pointer p, const_reference val ) : constructs an object in the allocated storage 
 		 */
-		explicit vector (size_type n, const value_type &val = value_type(), 
+		explicit vector (size_type n, const value_type &val = value_type(),
 						const allocator_type &alloc = allocator_type())
 			: _allocType(alloc), _pointer_Arr(NULL), _size(n), _capasity(n)
 		{
@@ -104,17 +106,17 @@ namespace ft
 			for (size_type i = 0; i < n; i++)
 				_allocType.construct( &_pointer_Arr[i], val ); // _pointer_Arr + i
 		};
-	
-		/*   
-			copy constructor 
+
+		/*
+			copy constructor
 		*/
 		vector (const vector &x)
-			: 	_allocType(x.allocator_type()), _size(x.size), _capasity(x.capacity)
+			: 	_allocType(x._allocType), _size(x.size), _capasity(x.capacity)
 		{
 			//std::cout << GREEN << " copy constructor called " << RESET << std::endl;
 			_pointer_Arr = _allocType.allocate(_size);
 			for (size_type i = 0; i < _size; i++)
-				_allocType.construct( &_pointer_Arr[i], x.val ); */
+				_allocType.construct( &_pointer_Arr[i], x.val );
 		}
 
 		// 
@@ -137,7 +139,7 @@ namespace ft
 			/* ########################## DESTRUCTOR  ##############################  */
 		~vector()
 		{
-			std::cout << RED << " destructor called " << RESET << std::endl;
+			//std::cout << RED << " destructor called " << RESET << std::endl;
 			clear();
 			if (_capasity > 0)
 				_allocType.deallocate(_pointer_Arr, _capasity);
@@ -244,7 +246,7 @@ namespace ft
 		};
 		
 		const_reference front() const 
-		{ 
+		{
 			return _pointer_Arr[0]; // *begin();
 		};
 		
@@ -253,6 +255,7 @@ namespace ft
 		{ 
 			return _pointer_Arr[_size - 1];  // *(end() - 1)
 		};
+		
 		const_reference back() const 
 		{
 			 return _pointer_Arr[_size - 1];  // *(end() - 1)
@@ -288,7 +291,7 @@ namespace ft
 		/* adds the new element to the end ;
 		 in case no capasity , has to reallocate & increase it 
 		*/
-		push_back(const T &value)
+		void	push_back(const T &value)
 		{
 			/* if (_size == _capasity)
 				empty() ? reserve(1) : reserve(_size * 2); */
@@ -304,8 +307,8 @@ namespace ft
 		void pop_back()
 		{
 			if (_size > 0)
-				_alloc.destroy(&_pointer_Arr[_size - 1]);
-				_size -= 1;
+				_allocType.destroy(&_pointer_Arr[_size - 1]);
+			_size -= 1;
 		};
 
 		
@@ -370,7 +373,7 @@ namespace ft
 				_allocType.destroy(&(*first));
 			while (it + distance != end())
 			{
-				_allocType.construct(&(*it), *(it + dist));
+				_allocType.construct(&(*it), *(it + distance));
 				it += 1;
 			}
 			while (distance-- > 0)
@@ -396,21 +399,21 @@ namespace ft
 			x._size = temp_size;
 		};
 
-		
+	
 		void clear()
 		{
-			if (_size > 0)
-			{
+			/* if (_size > 0)
+			{ */
 				for (iterator it = begin(); it != end(); it++)
 					_allocType.destroy(&(*it));
 				_size = 0;
-			}
-		};
+			/* } */
+		}; 
 		
 		/* ##########################   ALLOCATOR  ##############################  */
 
 		/* returns a copy of the allocator obj assosiated with the vector */
-		allocator_type get_allocator() const;
+		//allocator_type get_allocator() const;
 
 		
 		/* ##########################    PRIVATE METHODS   ##############################  */

@@ -6,7 +6,7 @@
 /*   By: mgulenay <mgulenay@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 13:41:55 by mgulenay          #+#    #+#             */
-/*   Updated: 2022/12/29 15:42:58 by mgulenay         ###   ########.fr       */
+/*   Updated: 2023/01/05 13:05:01 by mgulenay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,18 +63,18 @@ namespace ft
 		static const bool value = true;
 	};
 	
-	template <>
+/* 	template <>
 	struct is_integral<char16_t>
 	{
 		static const bool value = true;
 	};
-
-	template <>
+ */
+	/* template <>
 	struct is_integral<char32_t>
 	{
 		static const bool value = true;
 	};
-	
+	 */
 	template <>
 	struct is_integral<wchar_t>
 	{
