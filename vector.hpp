@@ -6,7 +6,7 @@
 /*   By: mgulenay <mgulenay@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 14:56:11 by mgulenay          #+#    #+#             */
-/*   Updated: 2023/01/05 14:58:11 by mgulenay         ###   ########.fr       */
+/*   Updated: 2023/01/06 22:48:37 by mgulenay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,9 @@ namespace ft
 	class vector
 	{
 
-		public: 
+		public:
 		
-		/*  ######################Aliases --  template parameters , types : #####################  */
+		/*  ######################   Aliases --  template parameters , types : #####################  */
 		typedef T														value_type;
 		typedef Alloc													allocator_type;
 		typedef typename allocator_type::reference						reference; // T&
@@ -80,7 +80,7 @@ namespace ft
 			
 		/*
 			default constructor : the container keeps & uses an internal copy of this allocator
-			 (an alias to the 2. template parameter) 
+			 (an alias to the 2. template parameter)
 		*/
 		explicit vector (const allocator_type &alloc = allocator_type())
 			: 	_allocType(alloc), _pointer_Arr(NULL), _size(0), _capasity(0)
@@ -119,8 +119,7 @@ namespace ft
 				_allocType.construct( &_pointer_Arr[i], x.val );
 		}
 
-		// 
-		vector& operator=( const vector& x)
+	/* 	vector& operator=( const vector& x)
 		{
 			if (this != &x)
 			{
@@ -128,7 +127,7 @@ namespace ft
 				assign(x.begin(), x.end());
 			}
 			return (*this);	
-		};
+		}; */
 		
 		allocator_type get_allocator() const
 		{
@@ -143,32 +142,62 @@ namespace ft
 			clear();
 			if (_capasity > 0)
 				_allocType.deallocate(_pointer_Arr, _capasity);
-	
 		}
 
 		/* ###########################     ITERATORS  ##############################  */
 		
 		/* iterator pointing to the first element of the vector ; returns it to beginnig*/
-		iterator begin() { return iterator(_pointer_Arr); };
-		const_iterator cbegin() const { return const_iterator(_pointer_Arr); };
+		iterator begin() 
+		{ 
+			return iterator(_pointer_Arr); 
+		};
+
+		const_iterator cbegin() const 
+		{ 
+			return const_iterator(_pointer_Arr); 
+		};
 		
 		/* iterator pointing to the 'past-the-end' element of the vector; returns it to end */
-		iterator end() { return iterator(_pointer_Arr + _size); };
-		const_iterator cend() const { return const_iterator(_pointer_Arr + _size); };
+		iterator end()
+		{ 
+			return iterator(_pointer_Arr + _size); 
+		};
+		
+		const_iterator cend() const 
+		{ 
+			return const_iterator(_pointer_Arr + _size);
+		};
 		
 		/* reverse iterator pointing to the 'before-the-first' element of the vector */
-		reverse_iterator rbegin() { return reverse_iterator(_pointer_Arr - 1); };   // reverse_iterator(end())
-		const_reverse_iterator crbegin() const { return const_reverse_iterator(_pointer_Arr - 1); }; // const_reverse_iterator(end())
+		reverse_iterator rbegin() 
+		{ 
+			return reverse_iterator(_pointer_Arr - 1); 
+		};   // reverse_iterator(end())
+		
+		const_reverse_iterator crbegin() const 
+		{ 
+			return const_reverse_iterator(_pointer_Arr - 1); 
+		}; // const_reverse_iterator(end())
 		
 		/* reverse iterator pointing to the last element of the vector */
-		reverse_iterator rend() { return reverse_iterator(_pointer_Arr + _size - 1); }; // reverse_iterator(begin())
-		const_reverse_iterator crend() const { return const_reverse_iterator(_pointer_Arr + _size - 1); }; // const_reverse_iterator(begin())
+		reverse_iterator rend() 
+		{ 
+			return reverse_iterator(_pointer_Arr + _size - 1); 
+		}; // reverse_iterator(begin())
+		
+		const_reverse_iterator crend() const 
+		{ 
+			return const_reverse_iterator(_pointer_Arr + _size - 1); 
+		}; // const_reverse_iterator(begin())
 
 
 		/* ############################   CAPASITY   ##############################  */
 		
 		/* returns the size of the vector  */
-		size_type	size() const { return _size; };
+		size_type	size() const
+		{ 
+			return _size; 
+		};
 		
 		/* returns the maximum size that can be allocated  */
 		size_type	max_size() const
@@ -196,17 +225,27 @@ namespace ft
 		};
 		
 		/* returns the actual storage size allocated */
-		size_type	capacity() const { return (_capasity); };
+		size_type	capacity() const 
+		{ 
+			return (_capasity); 
+		};
 		
 		/* returns true if the vector is empty */
-		bool		empty() const {  return (_size == 0); };
+		bool		empty() const 
+		{  
+			return (_size == 0); 
+		};
 		
-		/* the new capasity to be allocated; at least enough to contain n elements */
+		/* increases the capasity of the vector to a value that is ' >= new_cap'
+			if new_cap is > the current capasity , new stroage is allocated,
+			! reserve does not change the size of the vector !
+			+ new_cap : in nb. of elements
+		 */
 		void		reserve(size_type new_cap)
 		{
-			if (new_cap > max_size())
-				throw std::length_error("out of capasity"); //"ft::vector::reserve"
-			if (new_cap > _capasity)
+			if ( new_cap > max_size() )
+				throw std::length_error("ft::reserve() : out of max. permitted size");
+			else if (new_cap > _capasity)
 				ReAlloc(new_cap);
 		};
 
@@ -264,13 +303,18 @@ namespace ft
 
 		/* ##########################     MODIFIERS / METHODS   ##############################  */
 		
-		/* 	assigns new containers to the vector, replacing its current contents
+		/* 	
+			assigns new contents to the vector, replacing its current contents
 			& modifying its size accordingly.
+			++ any element held in the container before the call are destroyed &
+				replaced by newly constructed element
+			++ no capasity ? reallocate
 		*/
 		template <class InputIterator>  
-		void assign (InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = 0)
+		void	assign (InputIterator first, InputIterator last, 
+					typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = 0)
 		{
-			this->clear();
+			clear();
 			while (first != last)
 			{
 				push_back(*first);
@@ -278,9 +322,10 @@ namespace ft
 			}	
 		};
 		
-		void assign (size_type n, const value_type& val)
+		/* new content are n elements , each initialized to a copy of val */
+		void	assign (size_type n, const value_type& val)
 		{
-			this->clear();
+			clear();
 			while (n)
 			{
 				push_back(val);
@@ -288,46 +333,56 @@ namespace ft
 			}
 		};
 
-		/* adds the new element to the end ;
-		 in case no capasity , has to reallocate & increase it 
+		/* 
+			adds the new element to the end of the container;
+			+ the new element is initialized as a copy of value,
+			+ increases the container size by one -- 
+		 	in case no capasity , has to reallocate & increase it 
 		*/
 		void	push_back(const T &value)
 		{
-			/* if (_size == _capasity)
-				empty() ? reserve(1) : reserve(_size * 2); */
-			if (_size >= _capasity)
-			{
-				ReAlloc((_capasity + _size) / 2); // growing by 50%
-			}
+			if (_size == _capasity)
+				empty() ? reserve(1) : reserve(_size * 2);
+	/* 	if (_size >= _capasity)
+		{
+			ReAlloc((_capasity + _size) / 2); // growing by 50%
+		}  */
 			_allocType.construct(&_pointer_Arr[_size], value);
 			_size += 1;
 		};
 
-		/* remove the last element */
-		void pop_back()
+		/* 
+			remove the last element 
+			+ reduces the container size by 1.
+			+ destroys the removed element, 
+			check the size; otherwise < 0 would be problem
+		*/
+		void	pop_back()
 		{
 			if (_size > 0)
+			{
 				_allocType.destroy(&_pointer_Arr[_size - 1]);
-			_size -= 1;
+				_size -= 1;
+			}
 		};
 
 		
-		/* insert an element with a value of value at a positon pos &
-			incereases the size of the vector,
-			needs to be reallocated if the capacity is not enough
+		/*  inserts new elements with a value of value before the element at the 
+			specified position
+			+ incereases the size of the vector,
+			+ needs to be reallocated if the capacity is not enough
+			++ returns an iterator that points to the first of the newly inserted elements.
+			-- iterator : random access iterator type
 		*/
-		iterator insert( iterator pos, const value_type& value )
+	/* 	iterator insert(iterator pos, const value_type& value)
 		{
-			difference_type idx = pos - begin();
+			difference_type difference = pos - begin();
 			insert(pos, 1, value);
-			return iterator(&_pointer_Arr[idx]);
+			return iterator(&_pointer_Arr[difference]);
 		};
-
-		/* insert n elements with a value of value at a positon pos &
-			incereases the size of the vector
-			needs to be reallocated if the capacity is not enough
-		*/
-		void insert (iterator pos, size_type n, const value_type& value)
+ */
+		
+	/* 	void insert (iterator pos, size_type n, const value_type& value)
 		{
 			difference_type idx = pos - begin();
 			
@@ -338,50 +393,76 @@ namespace ft
 			
 			// need to movethe rest of the elements from the pos
 			// moveElements();
-		};
+		}; */
+		
+		/*  copies of the elements are inserted at position in the same order
+			+ it includes all the elements btw first & last, but element pointed by first 
+			not included.
+		*/
+	/* 	template <class InputIterator>    
+		void insert (iterator pos, InputIterator first, InputIterator last)
+		{
+			
+		}; */
 		
 		/* 
-			removes from the vector one element & reduces size by 1 
+			removes from the vector either one element or a range of elements [first, last)  
+			+ reduces the container size by the nb. of elements removed--destroyed
+			++ return value : an iterator pointing to the new location of the element that
+			followed the last element erased by the func call. 
+			iterator is a random access iterator type that points to elements.
 		*/
-		iterator erase( iterator pos )
+		iterator	erase( iterator pos )
 		{
-			if ( empty() )
-				return (end());
+			/* if ( empty())
+				return (end()); */
 			iterator it = begin();
+			std::cout << " start " << *it << std::endl;
 			while (it != pos)
 				it += 1;
+			std::cout << " item to destroy " << *it << std::endl;
+			std::cout << " address " << &(*it) << std::endl;
 			_allocType.destroy(&(*it));
 			while (it + 1 != end())
 			{
+				std::cout << " items after destroyed element " << *(it + 1) << std::endl;
 				_allocType.construct(&(*it), *(it + 1));
 				it += 1;
 			}
-			pop_back();
+			pop_back(); // otherwise the last element is added 2 times
+			std::cout << " pos " << *(pos) << std::endl;
 			return (pos);
 		};
-
-		iterator erase( iterator first, iterator last )
+	
+		iterator	erase( iterator first, iterator last )
 		{
-			if ( empty() )
-				return (end());
+			/* if (empty())
+				return (end()); */
 			iterator it = begin();
-			iterator rtn = first;
-			difference_type distance = last -first;
+			iterator pos = first;
+			difference_type distance = last - first;
+			std::cout << " distance " << (distance) << std::endl;
 			while (it != first)
 				it += 1;
 			for (; first != last; first++)
 				_allocType.destroy(&(*first));
 			while (it + distance != end())
 			{
+				std::cout << " items after destroyed element " << *(it + distance) << std::endl;
 				_allocType.construct(&(*it), *(it + distance));
 				it += 1;
 			}
 			while (distance-- > 0)
 				pop_back();
-			return (rtn);
+			return (pos);
 		};
 		
-		void swap(vector &x)
+		/*
+			exchanges the content of the container by the content of x,
+			which is another vector object of the same type. Sizes may differ.
+			all iterators & references remain valid.
+		*/
+		void	swap(vector &x)
 		{
 			allocator_type	temp_alloc = _allocType;
 			pointer 		temp_pointer = _pointer_Arr;
@@ -399,16 +480,22 @@ namespace ft
 			x._size = temp_size;
 		};
 
-	
-		void clear()
+		/*
+			clears content -- removes all elements from the vector -- 
+			+ leaving the container with a size of 0
+			+ leaves the capasity of the vector unchanged 
+		*/
+		void	clear()
 		{
-			/* if (_size > 0)
-			{ */
+			if (_size > 0)
+			{
 				for (iterator it = begin(); it != end(); it++)
 					_allocType.destroy(&(*it));
 				_size = 0;
-			/* } */
-		}; 
+			}
+		};
+		
+		
 		
 		/* ##########################   ALLOCATOR  ##############################  */
 
@@ -426,15 +513,13 @@ namespace ft
 		*/
 		void ReAlloc(size_t newCapasity)
 		{
-			pointer temp = _allocType(newCapasity); // allocate()
+			pointer temp = _allocType.allocate(newCapasity);
 
-			if (newCapasity < _size) // downsizing 
-				_size = newCapasity;
-
-			for (size_t i = 0; i < _size; i++)
+			for (size_type i = 0; i < _size; i++)
 				_allocType.construct(&temp[i], _pointer_Arr[i]);
 			
-			this->~vector(); // delete the old mem
+			//this->~vector(); // delete the old mem
+			_allocType.deallocate(_pointer_Arr, _capasity);
 			_pointer_Arr = temp;
 			_capasity = newCapasity;
 		}

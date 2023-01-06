@@ -6,7 +6,7 @@
 /*   By: mgulenay <mgulenay@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 17:16:43 by mgulenay          #+#    #+#             */
-/*   Updated: 2022/12/30 21:15:11 by mgulenay         ###   ########.fr       */
+/*   Updated: 2023/01/06 18:31:53 by mgulenay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -308,10 +308,11 @@ namespace ft
 		random_access_iterator(const random_access_iterator<T> &src) : _it_ptr(src._it_ptr) {};
 		random_access_iterator &operator=(const random_access_iterator<T> &src)
 		{
-			if (this != src)
+			if (this != &src)
 				_it_ptr = src._it_ptr;
 			return (*this);
 		};	
+		
 		virtual ~random_access_iterator() {};
 
 		pointer base() const
@@ -376,13 +377,13 @@ namespace ft
 		/* returns a reverse iterator pointing to the element located n positions before the element the 
 			iterator currently points to
 		*/
-		random_access_iterator operator-(difference_type n) const
+		random_access_iterator operator-(difference_type n)
 		{
 			return (_it_ptr - n);
 		}
 
 		/* advances the reverse_iterator by n elements positions */
-		random_access_iterator operator+=(difference_type n) const
+		random_access_iterator operator+=(difference_type n)
 		{
 			_it_ptr += n;
 			return (*this);	
