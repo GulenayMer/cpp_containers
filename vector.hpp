@@ -6,7 +6,7 @@
 /*   By: mgulenay <mgulenay@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 14:56:11 by mgulenay          #+#    #+#             */
-/*   Updated: 2023/01/06 22:48:37 by mgulenay         ###   ########.fr       */
+/*   Updated: 2023/01/07 12:37:49 by mgulenay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,12 +205,19 @@ namespace ft
 			return (_allocType.max_size());
 		};
 		
-		/* resizes the container so that it contains n elements */
+		/* resizes the container so that it contains n elements
+			-- if n < size; the content is reduced to its first n elements; 
+				removing those beyond & destroying them
+			-- if n > size; the content is expanded by inserting at the end as many
+			elements as needed to reach a size of n. 
+			-- if n > capasity; reallocation of the allocated storge space occurs.
+			!!this func. changes the actual content of the cont. by inserting / erasing elm.from it!!
+		 */
 		void resize (size_type n, value_type val = value_type())
 		{
-			if ( n > _capasity)
+			if (n > _capasity)
 				reserve(n);
-			if ( n >= _size)
+			if (n >= _size)
 			{
 				for (size_type i = _size; i < n; i++)
 					_allocType.construct(&_pointer_Arr[i], val);
@@ -255,26 +262,26 @@ namespace ft
 		/* a reference to the element at n index  */
 		reference operator[]( size_type pos ) 
 		{ 
-			return _pointer_Arr[pos]; 
+			return _pointer_Arr[pos];
 		};
 		
 		const_reference operator[]( size_type pos ) const
-		 { 
-			return _pointer_Arr[pos]; 
-		 };
+		{ 
+			return _pointer_Arr[pos];
+		};
 		
 		/* a reference to the element at n index  */
-		reference at( size_type pos )
+		reference at(size_type pos)
 		{
-			if ( pos >= size() )
-				throw std::out_of_range("out range"); // ft::vector::at
+			if (pos >= _size)
+				throw std::out_of_range("ft::vector::at Out of Range");
 			return _pointer_Arr[pos];
 		};
 
 		const_reference at (size_type pos) const
 		{
-			if ( pos >= _size )
-				throw std::out_of_range("out range");  // ft::vector::at
+			if (pos >= _size)
+				throw std::out_of_range("ft::vector::at Out of Range");
 			return _pointer_Arr[pos];
 		};
 		
@@ -310,9 +317,11 @@ namespace ft
 				replaced by newly constructed element
 			++ no capasity ? reallocate
 		*/
+	//	typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = 0 
+	// used to prevent error : invalid type argument of unary ‘*’ (have ‘int’)
 		template <class InputIterator>  
 		void	assign (InputIterator first, InputIterator last, 
-					typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = 0)
+			typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = 0 )
 		{
 			clear();
 			while (first != last)
