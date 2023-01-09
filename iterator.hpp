@@ -6,7 +6,7 @@
 /*   By: mgulenay <mgulenay@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 17:16:43 by mgulenay          #+#    #+#             */
-/*   Updated: 2023/01/06 18:31:53 by mgulenay         ###   ########.fr       */
+/*   Updated: 2023/01/09 13:31:33 by mgulenay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,19 @@
 
 namespace ft
 {
+	
+	/*    ################ ITERATOR TRAITS (feature/attribute) ###################### */
+	/*
+		used to distinguish different iterators, built for different abilities.
+		Iterator Categories : iterator_category :  
+	*/
+	
+	class input_iterator_tag {}; // identifies the category of an iterator as an input iter.
+	class output_iterator_tag {}; // identifies the category of an iterator as an output iter.
+	class forward_iterator_tag : public input_iterator_tag {}; // identifies the category of an iterator as a forward iter.
+	class bidirectional_iterator_tag : public forward_iterator_tag {}; // identifies the category of an iterator as a bidirectional iter.
+	class random_access_iterator_tag : public bidirectional_iterator_tag {}; // identifies the category of an iterator as a rand-acc. iter.
+	
 	/*    ################ ITERATOR BASE CLASS -- std::iterator ###################### */
 
 		/* 
@@ -25,31 +38,17 @@ namespace ft
 			# simplifies definitions of the required types for iterators.
 			# does not provide any of the functionality an iterator is expected to have.
 		*/
-	template <
-	class Category, 
-	class T, 
-	class Distance = std::ptrdiff_t,
-    class Pointer = T*, 
-	class Reference = T&>
-  	struct iterator
+	template <class Category, class T, class Distance = std::ptrdiff_t, class Pointer = T*, class Reference = T&>
+  	class iterator
 	{
-    	typedef Category  iterator_category;
-    	typedef T         value_type; // the type pointed to by the iterator
-    	typedef Distance  difference_type; // distance btw iterators is represented as this type
-    	typedef Pointer   pointer; // represents a pointer to value_type
-    	typedef Reference reference; // represents a reference to value_type
+		public : 
+    		typedef Category  iterator_category;
+    		typedef T         value_type; // the type pointed to by the iterator
+    		typedef Distance  difference_type; // distance btw iterators is represented as this type
+    		typedef Pointer   pointer; // represents a pointer to value_type
+    		typedef Reference reference; // represents a reference to value_type
   	};
   
-	/*    ################ ITERATOR TRAITS (feature/attribute) ###################### */
-	/*
-		used to distinguish different iterators, built for different abilities.
-		Iterator Categories : iterator_category :  
-	*/
-	struct input_iterator_tag {}; // identifies the category of an iterator as an input iter.
-	struct output_iterator_tag {}; // identifies the category of an iterator as an output iter.
-	struct forward_iterator_tag : public input_iterator_tag {}; // identifies the category of an iterator as a forward iter.
-	struct bidirectional_iterator_tag : public forward_iterator_tag {}; // identifies the category of an iterator as a bidirectional iter.
-	struct random_access_iterator_tag : public bidirectional_iterator_tag {}; // identifies the category of an iterator as a rand-acc. iter.
 
 	/* 
 		traits class defining properties of iterators
@@ -61,8 +60,9 @@ namespace ft
 		for ordinary iterators that also can be used as iterators.
 	*/
 	template<class Iterator> // iterator type, can be also T
-	struct iterator_traits
+	class iterator_traits
 	{
+		public:
 		typedef typename Iterator::iterator_category	iterator_category; 
 		typedef typename Iterator::value_type			value_type; // the type of the element the iterator can point to
 		typedef typename Iterator::difference_type		difference_type; // type to express the result of substracting one iterator from another
@@ -75,8 +75,9 @@ namespace ft
 		# for any type "pointer to T", it is defined that it has the random acc. iter. category.
 	*/
 	template<class T>
-	struct iterator_traits<T*>
+	class iterator_traits<T*>
 	{
+		public: 
 		typedef ft::random_access_iterator_tag	iterator_category;
 		typedef T 								value_type;
 		typedef ptrdiff_t						difference_type;
@@ -85,8 +86,9 @@ namespace ft
 	};
 
 	template <class T> 
-	struct iterator_traits<const T*>
+	class iterator_traits<const T*>
 	{
+		public:
 		typedef ft::random_access_iterator_tag	iterator_category;
 		typedef T 								value_type;
 		typedef ptrdiff_t						difference_type;

@@ -6,7 +6,7 @@
 /*   By: mgulenay <mgulenay@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 14:56:11 by mgulenay          #+#    #+#             */
-/*   Updated: 2023/01/07 12:37:49 by mgulenay         ###   ########.fr       */
+/*   Updated: 2023/01/09 18:58:44 by mgulenay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <iostream>
 #include "iterator.hpp"
 #include "std_functions.hpp"
+//#include "lexicographical_compare.hpp"
 
 
 #define RESET   "\033[0m"
@@ -111,12 +112,13 @@ namespace ft
 			copy constructor
 		*/
 		vector (const vector &x)
-			: 	_allocType(x._allocType), _size(x.size), _capasity(x.capacity)
+			: 	_allocType(allocator_type()), _pointer_Arr(NULL), _size(0), _capasity(0)
 		{
 			//std::cout << GREEN << " copy constructor called " << RESET << std::endl;
-			_pointer_Arr = _allocType.allocate(_size);
+		/* 	_pointer_Arr = _allocType.allocate(_size);
 			for (size_type i = 0; i < _size; i++)
-				_allocType.construct( &_pointer_Arr[i], x.val );
+				_allocType.construct( &_pointer_Arr[i], x.); */
+				*this = x;
 		}
 
 	/* 	vector& operator=( const vector& x)
@@ -171,24 +173,28 @@ namespace ft
 		/* reverse iterator pointing to the 'before-the-first' element of the vector */
 		reverse_iterator rbegin() 
 		{ 
-			return reverse_iterator(_pointer_Arr - 1); 
-		};   // reverse_iterator(end())
+			return reverse_iterator(end());
+		};  
+			//return reverse_iterator(_pointer_Arr - 1); 
 		
 		const_reverse_iterator crbegin() const 
 		{ 
-			return const_reverse_iterator(_pointer_Arr - 1); 
-		}; // const_reverse_iterator(end())
+			//return const_reverse_iterator(_pointer_Arr - 1); 
+			return const_reverse_iterator(end());
+		};
 		
 		/* reverse iterator pointing to the last element of the vector */
 		reverse_iterator rend() 
 		{ 
-			return reverse_iterator(_pointer_Arr + _size - 1); 
-		}; // reverse_iterator(begin())
+			//return reverse_iterator(_pointer_Arr + _size - 1); 
+			return reverse_iterator(begin());
+		}; 
 		
 		const_reverse_iterator crend() const 
 		{ 
-			return const_reverse_iterator(_pointer_Arr + _size - 1); 
-		}; // const_reverse_iterator(begin())
+			//return const_reverse_iterator(_pointer_Arr + _size - 1);
+			return const_reverse_iterator(begin());
+		}; 
 
 
 		/* ############################   CAPASITY   ##############################  */
@@ -542,7 +548,9 @@ namespace ft
 	*/
 	
 	template< class T, class Alloc >
-	// true if the contents of the vectors are equal, false otherwise
+	/* first compares its sizes ; if match then elements are compared sequentially; 
+		stops at the first mismatch
+	 */
 	bool operator==(const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
 	{
 		if (lhs.size() != rhs.size())
@@ -559,47 +567,35 @@ namespace ft
 	// return true if the contents of the vectors are not equal, false otherwise
 	bool operator!=( const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs )
 	{
-		if ( !(lhs == rhs) )
-			return (true);
-		return (false);
+		return !(lhs == rhs);
 	}
 
 	template< class T, class Alloc >
 	// true if the contents of the lhs are lexicographically less than the contents of rhs, false otherwise
-	bool operator<( const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs )
+	bool operator<(ft::vector<T,Alloc>& lhs, ft::vector<T,Alloc>& rhs )
 	{
-		if ( lhs < rhs)
-			return (true);
-		return (false);
-		// return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+		return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
 	};
 	
 	template< class T, class Alloc >
 	// true if the contents of the lhs are lexicographically less than or equal to the contents of rhs, false otherwise
-	bool operator<=( const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs )
+	bool operator<=(ft::vector<T,Alloc>& lhs, ft::vector<T,Alloc>& rhs )
 	{
-		if ( lhs <= rhs)
-			return (true);
-		return (false);
+		return !(lhs > rhs);
 	};
 	
 	template< class T, class Alloc >
 	// true if the contents of the lhs are lexicographically greater than the contents of rhs, false otherwise
-	bool operator>( const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs )
-	{
-		if ( lhs > rhs)
-			return (true);
-		return (false); 
-		// return ( lhs > rhs);
+	bool operator>(ft::vector<T,Alloc>& lhs, ft::vector<T,Alloc>& rhs )
+	{ 
+		return (rhs < lhs);
 	};
 
 	template< class T, class Alloc >
 	// true if the contents of the lhs are lexicographically greater than or equal to the contents of rhs, false otherwise
-	bool operator>=( const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs )
+	bool operator>=(ft::vector<T,Alloc>& lhs, ft::vector<T,Alloc>& rhs )
 	{
-		if ( lhs >= rhs)
-			return (true);
-		return (false); 
+		return !(lhs < rhs);
 	};
 
 	template< class T, class Alloc >
