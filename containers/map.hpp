@@ -6,7 +6,44 @@
 /*   By: mgulenay <mgulenay@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 14:56:05 by mgulenay          #+#    #+#             */
-/*   Updated: 2022/12/16 14:56:06 by mgulenay         ###   ########.fr       */
+/*   Updated: 2023/01/10 14:58:36 by mgulenay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
+#ifndef MAP_HPP
+#define MAP_HPP
+
+
+namespace ft
+{
+
+	class map 
+	{
+
+
+
+
+
+	
+		
+	};
+
+
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#endif

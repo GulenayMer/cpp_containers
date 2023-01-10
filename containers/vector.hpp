@@ -6,7 +6,7 @@
 /*   By: mgulenay <mgulenay@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 14:56:11 by mgulenay          #+#    #+#             */
-/*   Updated: 2023/01/09 18:58:44 by mgulenay         ###   ########.fr       */
+/*   Updated: 2023/01/10 15:08:32 by mgulenay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,12 @@
 
 #include <memory> // std::allocator
 #include <iostream>
-#include "iterator.hpp"
+#include "iterator_base.hpp"
+#include "random_access_iterator.hpp"
+#include "reverse_iterator.hpp"
 #include "std_functions.hpp"
-//#include "lexicographical_compare.hpp"
+#include "is_integral.hpp"
+#include "lexicographical_compare.hpp"
 
 
 #define RESET   "\033[0m"

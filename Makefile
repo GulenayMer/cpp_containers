@@ -6,7 +6,7 @@
 #    By: mgulenay <mgulenay@student.42wolfsburg.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/19 11:02:38 by mgulenay          #+#    #+#              #
-#    Updated: 2022/12/19 11:02:40 by mgulenay         ###   ########.fr        #
+#    Updated: 2023/01/10 14:58:48 by mgulenay         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,11 @@ CC = g++
 
 FLAGS = -Wall -Wextra -Werror -std=c++98
 
-SRC = 	main.cpp \
+SRC = 	vector_test.cpp \
+#std_func_test.cpp
+#iterator_test.cpp
+#map_test.cpp
+
 
 OBJ	=	$(SRC:%.cpp=%.o)
 
