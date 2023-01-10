@@ -1,7 +1,7 @@
 #ifndef STACK_HPP
 #define STACK_HPP
 
-#include "vector.hpp"
+#include "./vector.hpp"
 /*
 	stack, container adaptors, 
 	LIFO , last in first out
