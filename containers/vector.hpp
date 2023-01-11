@@ -6,7 +6,7 @@
 /*   By: mgulenay <mgulenay@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 14:56:11 by mgulenay          #+#    #+#             */
-/*   Updated: 2023/01/10 15:20:57 by mgulenay         ###   ########.fr       */
+/*   Updated: 2023/01/11 13:21:19 by mgulenay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include <memory> // std::allocator
 #include <iostream>
 #include "../iterators/iterator_base.hpp"
-#include "../iterators/random_access_iterator.hpp"
 #include "../iterators/reverse_iterator.hpp"
 #include "../std_functions/is_integral.hpp"
 #include "../std_functions/std_functions.hpp"
@@ -63,7 +62,7 @@ namespace ft
 		typedef typename ft::random_access_iterator<const value_type>	const_iterator;
     	typedef typename ft::reverse_iterator<value_type>				reverse_iterator;
 		typedef typename ft::reverse_iterator<const value_type>			const_reverse_iterator;
-		typedef typename ft::iterator_traits<iterator>::difference_type	difference_type; // ptrdiff_t
+		typedef typename std::ptrdiff_t									difference_type; // ptrdiff_t
 		typedef typename allocator_type::size_type							size_type; // size_t
 
 		private:
@@ -178,7 +177,7 @@ namespace ft
 			//return reverse_iterator(_pointer_Arr - 1); 
 		
 		const_reverse_iterator crbegin() const 
-		{ 
+		{
 			//return const_reverse_iterator(_pointer_Arr - 1); 
 			return const_reverse_iterator(end());
 		};
@@ -389,27 +388,35 @@ namespace ft
 			++ returns an iterator that points to the first of the newly inserted elements.
 			-- iterator : random access iterator type
 		*/
-	/* 	iterator insert(iterator pos, const value_type& value)
+	 	iterator insert(iterator pos, const value_type& value)
 		{
-			difference_type difference = pos - begin();
+			if (pos < begin() || pos > end())
+				throw std::logic_error("ft::vector::insert out of range");
+			difference_type new_pos = pos - begin();
 			insert(pos, 1, value);
-			return iterator(&_pointer_Arr[difference]);
+			return iterator(&_pointer_Arr[new_pos]);
 		};
- */
+ 
 		
-	/* 	void insert (iterator pos, size_type n, const value_type& value)
+/* 		void insert (iterator pos, size_type n, const value_type& value)
 		{
-			difference_type idx = pos - begin();
+			if (pos < begin() || pos > end())
+				throw std::logic_error("ft::vector::insert out of range");
+				
+			difference_type new_pos = pos - begin();
 			
 			if (_size + n > _capasity)
 				ReAlloc(_capasity + n);
 			
-			iterator newPosition(&_pointer_Arr[idx]);
+			iterator newPosition(&_pointer_Arr[new_pos]);
 			
 			// need to movethe rest of the elements from the pos
-			// moveElements();
-		}; */
-		
+			if (newPosition != end())
+			{
+				
+			}
+		};
+		 */
 		/*  copies of the elements are inserted at position in the same order
 			+ it includes all the elements btw first & last, but element pointed by first 
 			not included.
