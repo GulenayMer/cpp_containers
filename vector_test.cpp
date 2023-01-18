@@ -6,7 +6,7 @@
 /*   By: mgulenay <mgulenay@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 14:56:00 by mgulenay          #+#    #+#             */
-/*   Updated: 2023/01/18 17:57:55 by mgulenay         ###   ########.fr       */
+/*   Updated: 2023/01/19 00:16:48 by mgulenay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -261,7 +261,7 @@ int main()
     	std::cout << ' ' << *it_str;
   	std::cout << " ]\n"; */
 
-	ft::vector<int> myVec;
+	/* ft::vector<int> myVec;
 	for (size_t i = 0; i < 10; i++)
 		myVec.push_back(i);
 		
@@ -284,6 +284,6 @@ int main()
 	for (size_t i = 0; i < myVec.size(); i++)
 		std::cout << it_rev[i] << " ";
 	std::cout <<std::endl;
-
+ */
 	return 0;
 }
