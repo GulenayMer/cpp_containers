@@ -24,20 +24,23 @@ namespace ft
 	template <class Iterator>
 	class reverse_iterator
 	{
-		protected:
-			Iterator	_it_current; // called current in stl_iterator.h
-		
+
 		public:
 		
-		typedef typename iterator_traits<Iterator>::iterator_category	iterator_category;
-		typedef typename iterator_traits<Iterator>::value_type			value_type;
-		typedef typename iterator_traits<Iterator>::difference_type		difference_type;
-		typedef typename iterator_traits<Iterator>::pointer				pointer;
-		typedef typename iterator_traits<Iterator>::reference			reference;
-		typedef Iterator												iterator_type;
+		typedef Iterator												    iterator_type;
+		typedef typename ft::iterator_traits<Iterator>::value_type			value_type;
+		typedef typename ft::iterator_traits<Iterator>::pointer				pointer;
+		typedef typename ft::iterator_traits<Iterator>::reference			reference;
+		typedef typename ft::iterator_traits<Iterator>::difference_type		difference_type;
+		typedef typename ft::iterator_traits<Iterator>::iterator_category	iterator_category;
 
+
+		protected:
+			iterator_type	_it_current; // called current in stl_iterator.h
+
+		public: 
 		/* constructors */
-		reverse_iterator(): _it_current() {}; // iterator_type()
+		reverse_iterator(): _it_current(iterator_type()) {}; // iterator_type()
 		
 		explicit reverse_iterator(iterator_type it): _it_current(it) {};
 		
@@ -80,7 +83,7 @@ namespace ft
 		reference operator[](difference_type n) const
 		{
 			return ( base()[-n - 1] );
-		}		
+		}
 		
 		/*  ------------------- increment & decrement operators ------------------ */
 

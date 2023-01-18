@@ -6,7 +6,7 @@
 /*   By: mgulenay <mgulenay@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 14:56:00 by mgulenay          #+#    #+#             */
-/*   Updated: 2023/01/11 11:47:59 by mgulenay         ###   ########.fr       */
+/*   Updated: 2023/01/18 17:57:55 by mgulenay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int main()
 {
 	/* ############################  CAPASITY   ##############################  */
 
-	ft::vector<int> ftVec(5, 1);
+/* 	ft::vector<int> ftVec(5, 1);
 
  	std::cout << GREEN << " ---------------- " << RESET << std::endl;
 	std::cout << YELLOW << " Testing size() " << RESET << std::endl;
@@ -58,10 +58,10 @@ int main()
   	std::cout << " After resize() ----> ft::vector : " << "[ ";
  	for (unsigned i=0; i < myvec.size(); i++)
     	std::cout << myvec[i] << " ";
-  	std::cout << "]\n";
+  	std::cout << "]\n"; */
   
 	/* ############################ METHODS  ##############################  */
-	ft::vector<int> ftVec1;
+	/* ft::vector<int> ftVec1;
 	
 	std::cout << GREEN << " ---------------- " << RESET << std::endl;
 	std::cout << YELLOW << " Testing push_back() & pop_back() " << RESET << std::endl;
@@ -171,11 +171,11 @@ int main()
 	for (unsigned i = 0; i < ftObj.size(); i++)
 		std::cout << ftObj[i] << " ";
 	std::cout << "]\n";
-
+ */
 
 	/* ############################ ELEMENT ACCESS  ##############################  */
 	
-	std::cout << GREEN << " ---------------- " << RESET << std::endl;
+/* 	std::cout << GREEN << " ---------------- " << RESET << std::endl;
 	std::cout << YELLOW << " Testing at[] " << RESET << std::endl;
 	ft::vector<int> myvector (10);
 
@@ -199,11 +199,11 @@ int main()
 	myvector2.front() -= myvector2.back();
 
   	std::cout << "myvector2.front() is now " << myvector2.front() << '\n';
-  
+   */
   
 	/* ############################ COMPARASSION ##############################  */
 
- 	ft::vector<int> ftV1;
+ 	/* ft::vector<int> ftV1;
 	ftV1.push_back(5);
 	ftV1.push_back(10);
 	ftV1.push_back(15);
@@ -229,13 +229,13 @@ int main()
 	std::cout << "ftVec1 > ftVec2 = " << (ftV1 > ftV2) << std::endl;
 	std::cout << "ftVec1 >= ftVec2 = " << (ftV1 >= ftV2) << std::endl;
 	std::cout << "ftVec1 <= ftVec2 = " << (ftV1 <= ftV2) << std::endl;
-	
+	 */
 
 	/* ############################ ITERATION ##############################  */
 
-	/* ft::vector<int> myvector;
-	for (int i=1; i<=5; i++)
-		myvector.push_back(i);
+	/* ft::vector<int> _myvector;
+	for (int i = 1; i <= 5; i++)
+		_myvector.push_back(i);
 
 	ft::vector<std::string> mystring;
 	mystring.push_back("orange");
@@ -244,23 +244,46 @@ int main()
 	std::cout << GREEN << " ---------------- " << RESET << std::endl;
 	std::cout << YELLOW << " Testing iterator begin() & end() " << RESET << std::endl;
 	
-  	std::cout << "myvector contains:";
-  	for (ft::vector<int>::iterator it = myvector.begin() ; it != myvector.end(); ++it)
-    	std::cout << ' ' << *it;
-  	std::cout << '\n';
+  	std::cout << "myvector contains: " << "[ ";
+  	for (ft::vector<int>::iterator _it = _myvector.begin(); _it != _myvector.end(); ++_it)
+    	std::cout << ' ' << *_it;
+  	std::cout << " ]\n";
 
-	ft::vector<int>::iterator it = myvector.end() - 1;
-	std::cout << "Last string : " << *it << '\n';
+
+	ft::vector<int>::iterator it_end = _myvector.end() - 1;
+	std::cout << "Last string : " << *it_end << '\n';
   
  	std::cout << "Sum of nums: "
-              << std::accumulate(myvector.begin(), myvector.end(), 0) << '\n';
+              << std::accumulate(_myvector.begin(), _myvector.end(), 0) << '\n';
 	
-	std::cout << "mystring contains :";
-  	for (ft::vector<std::string>::iterator it = mystring.begin() ; it != mystring.end(); ++it)
-    	std::cout << ' ' << *it;
-  	std::cout << '\n'; */
+	std::cout << "mystring contains : " << "[ ";
+  	for (	ft::vector<std::string>::iterator it_str = mystring.begin(); it_str != mystring.end(); ++it_str)
+    	std::cout << ' ' << *it_str;
+  	std::cout << " ]\n"; */
 
+	ft::vector<int> myVec;
+	for (size_t i = 0; i < 10; i++)
+		myVec.push_back(i);
+		
+	std::cout <<"Vector elements are: " <<std::endl;
+	for (size_t i = 0; i < myVec.size(); i++)
+		std::cout <<myVec.at(i) <<" ";
+	std::cout <<std::endl;
+	
+	ft::vector<int>::iterator it = myVec.begin();
+	ft::vector<int>::reverse_iterator it_rev;
+	std::cout <<"Dereference *it_rev = myVec.rbegin() = " <<*(it_rev = myVec.rbegin()) <<std::endl;
 
+	std::cout <<"Dereference *it_rev = myVec.rend() = " <<*(it_rev = myVec.rend()) <<std::endl;
+	if (*(it = myVec.begin()) == *(it_rev = myVec.rend()))
+		std::cout <<"iterator.begin() = reverse_iterator.rend()" <<std::endl;
+	
+	std::cout <<"The vector elements in reverse order are: ";
+	
+	it_rev = myVec.rbegin();
+	for (size_t i = 0; i < myVec.size(); i++)
+		std::cout << it_rev[i] << " ";
+	std::cout <<std::endl;
 
 	return 0;
 }
