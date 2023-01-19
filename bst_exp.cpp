@@ -3,7 +3,77 @@
 
 using namespace std;
 
-class bst
+/*
+	binary search tree;
+	how to create this non-linear data structure??
+	-- by dynamically created nodes linked to each other using pointers 
+		or references just the way we do it for the linked lists.
+	we can define the node as an object with 3 fields :
+	+ one for to store data,
+	+ one for to store address or reference to left child
+	+ one for to store adress or reference to right child 
+*/
+struct Node
+{
+	int		data;
+	Node	*left; // stores the address of the left child
+	Node	*right; // stores the address of the right child
+};
+
+// create a new node
+Node *createNewNode(Node *rootptr, int data)
+{
+	Node *newNode = new Node();
+	newNode->data = rootptr->data;
+	newNode->left = rootptr->right = NULL;
+	return newNode;
+}
+
+// insert a new value
+void	_insert(Node *rootPtr, int data)
+{
+	if (rootPtr == NULL)
+	{
+		rootPtr = createNewNode(rootPtr, data);
+	}
+	else if (data <= rootPtr->data)
+	{
+		rootPtr->left = Insert(root->left, data);
+	}
+	else
+	{
+		rootPtr->right = Insert(rootPtr->right, data);
+	}
+	return rootPtr;
+}
+
+bool _search(Node *rootPtr, int data)
+{
+	if (rootPtr == NULL)
+		return false;
+	else if (rootPtr->data = data)
+		return true;
+	else if (data <= rootPtr->data)
+		return _search(rootPtr->left, data);
+	else
+		return _search(rootPtr->right, data);
+}
+
+int main()
+{
+
+	struct Node	*rootPtr = NULL; // to store the address of root node
+
+	rootPtr = _insert(rootPtr, 15);
+	_insert(rootPtr, 20);
+	_insert(rootPtr, 10);
+
+}
+
+
+
+
+/* class bst
 {
 
 	private:
@@ -64,4 +134,4 @@ int main()
 	node.insert(root, 8);
 	node.traverse(root);
 	return 0;
-}
+} */

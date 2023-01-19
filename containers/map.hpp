@@ -6,7 +6,7 @@
 /*   By: mgulenay <mgulenay@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 14:56:05 by mgulenay          #+#    #+#             */
-/*   Updated: 2023/01/19 00:15:33 by mgulenay         ###   ########.fr       */
+/*   Updated: 2023/01/19 14:01:00 by mgulenay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include <iostream>
 #include "../iterators/iterator_base.hpp"
 #include "../iterators/reverse_iterator.hpp"
-#include "../iterators/bst_iterator.hpp"
+#include "../iterators/rb_tree.hpp"
 #include "../std_functions/is_integral.hpp"
 #include "../std_functions/std_functions.hpp"
 #include "../std_functions/lexicographical_compare.hpp"
@@ -55,10 +55,10 @@ namespace ft
 		typedef typename allocator_type::const_pointer			const_pointer;
 		typedef typename ft::reverse_iterator<iterator>			reverse_iterator;
 		typedef typename ft::reverse_iterator<const_iterator>	const_reverse_iterator;
-		typedef typename ft::bst_iterator<value_type, key_compare, allocator_type>	bst_tree;
-		typedef typename ft::bst_iterator<value_type, key_compare, allocator_type>::iterator			bt_iterator;
-		typedef typename ft::bst_iterator<value_type, key_compare, allocator_type>::const_iterator	const_bt_iterator;
-		
+		typedef typename ft::rb_tree<value_type, key_compare, allocator_type>::iterator			iterator;
+		typedef typename ft::rb_tree<value_type, key_compare, allocator_type>::const_iterator	const_iterator;
+		typedef typename ft::rb_tree<value_type, key_compare, allocator_type>	rb_tree;
+
 		/* compares obj.s of type value_type by the first components of the pairs */
 		typedef class value_compare : public std::binary_function<value_type, value_type, bool>
 		{
@@ -80,7 +80,7 @@ namespace ft
 
 			allocator_type		_alloc_type;
 			key_compare			_key_cmp;
-			bst_tree 				_bst;
+			rb_tree 				_bst;
 
 		public: 
 			
