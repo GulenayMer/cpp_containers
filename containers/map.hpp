@@ -6,7 +6,7 @@
 /*   By: mgulenay <mgulenay@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 14:56:05 by mgulenay          #+#    #+#             */
-/*   Updated: 2023/01/19 14:01:00 by mgulenay         ###   ########.fr       */
+/*   Updated: 2023/01/20 16:10:17 by mgulenay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,29 +36,31 @@
 */
 namespace ft
 {
-	template < class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<ft::pair<const Key, T>> >
-	class map 
+	template<class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<ft::pair<const Key, T>>>
+	class map
 	{
 		
 		public: 
 
-		typedef Key												key_type; // a map is uniquely identified by its key value
-		typedef T												mapped_type; // each elm. in a map stores some data as its mapped_value
-		typedef ft::pair<const Key, T>							value_type;
-		typedef Compare 										key_compare; // a binary predicate ; takes 2 keys & returns a bool
-		typedef Alloc											allocator_type;
-		typedef std::size_t										size_type;
-		typedef std::ptrdiff_t									difference_type;
-		typedef typename allocator_type::reference				reference;  // value_type&
-		typedef typename allocator_type::const_reference		const_reference;
-		typedef typename allocator_type::pointer				pointer;
-		typedef typename allocator_type::const_pointer			const_pointer;
-		typedef typename ft::reverse_iterator<iterator>			reverse_iterator;
-		typedef typename ft::reverse_iterator<const_iterator>	const_reverse_iterator;
-		typedef typename ft::rb_tree<value_type, key_compare, allocator_type>::iterator			iterator;
-		typedef typename ft::rb_tree<value_type, key_compare, allocator_type>::const_iterator	const_iterator;
-		typedef typename ft::rb_tree<value_type, key_compare, allocator_type>	rb_tree;
+		typedef Key																key_type; // a map is uniquely identified by its key value
+		typedef T																mapped_type; // each elm. in a map stores some data as its mapped_value
+		typedef ft::pair<const key_type, mapped_type>							value_type;
+		typedef Compare 														key_compare; // a binary predicate ; takes 2 keys & returns a bool
+		typedef Alloc															allocator_type;	
+		typedef std::size_t														size_type;
+		typedef std::ptrdiff_t													difference_type;
+		typedef typename allocator_type::reference								reference;  // value_type&
+		typedef typename allocator_type::const_reference						const_reference;
+		typedef typename allocator_type::pointer								pointer;
+		typedef typename allocator_type::const_pointer							const_pointer;
 
+
+		/* the mem. template class rebind provides a way to obtain an allocator for a diffirent type
+			For example, std::list<T, A> allocates nodes of some internal type Node<T>, 
+			using the allocator A::rebind<Node<T>>::other
+		*/
+		typedef typename allocator_type::template rebind<value_type>::other		type_allocator;
+		
 		/* compares obj.s of type value_type by the first components of the pairs */
 		typedef class value_compare : public std::binary_function<value_type, value_type, bool>
 		{
@@ -76,11 +78,19 @@ namespace ft
 				};
 		};
 
+
+		typedef typename ft::rb_tree<value_type, key_type, value_compare, allocator_type>::iterator			iterator;
+		typedef typename ft::rb_tree<value_type, key_type, value_compare, allocator_type>::const_iterator	const_iterator;
+		typedef typename ft::reverse_iterator<iterator>														reverse_iterator;
+		typedef typename ft::reverse_iterator<const_iterator>												const_reverse_iterator;
+
+
 		private : 
 
-			allocator_type		_alloc_type;
-			key_compare			_key_cmp;
-			rb_tree 				_bst;
+			allocator_type														_alloc_type;
+			key_compare															_key_cmp;
+			ft::rb_tree<value_type, key_type, value_compare, allocator_type>	_bst;
+
 
 		public: 
 			

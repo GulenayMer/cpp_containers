@@ -6,7 +6,7 @@
 /*   By: mgulenay <mgulenay@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 14:56:05 by mgulenay          #+#    #+#             */
-/*   Updated: 2023/01/11 15:13:06 by mgulenay         ###   ########.fr       */
+/*   Updated: 2023/01/20 15:19:23 by mgulenay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 namespace ft 
 {
 	/* 
-		a way to store 2 obj.s as a single unit
+		a way to store two obj.s as a single unit
 	*/
 	template<class T1, class T2>
 	struct pair
